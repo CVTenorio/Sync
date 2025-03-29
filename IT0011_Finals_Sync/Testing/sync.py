@@ -4,7 +4,10 @@ print("Hi pre!")
 This is a test file for the sync.py script.
 '''
 '''
-Testing Login Panel
+Testing Login 
+Suggestion: 
+1st panel = Sign up -> Sign In
+2nd panel = 
 '''
 from tkinter import *
 import customtkinter
