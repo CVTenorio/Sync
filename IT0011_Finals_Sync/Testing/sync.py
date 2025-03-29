@@ -21,7 +21,7 @@ Signup_label = customtkinter.CTkLabel(
     master=window,
     text="Signup",
     font=("Times New Roman", 18),
-    text_color="000000",
+    text_color="#000000",
     height=30,
     width=95,
     corner_radius=0,
@@ -30,3 +30,4 @@ Signup_label = customtkinter.CTkLabel(
 )
 
 
+window.mainloop()
