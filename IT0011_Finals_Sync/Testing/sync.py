@@ -47,9 +47,6 @@ def user_exists(first_name, last_name, email):
     
     return result is not None
 
-def is_valid_email(email):
-    return re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$", email)
-
 def save_data():
     first_name = entry_first_name.get()
     middle_name = entry_middle_name.get()
@@ -69,10 +66,7 @@ def save_data():
     if first_name == middle_name or first_name == last_name or middle_name == last_name:
         messagebox.showerror("Error", "Fields cannot have the same value.")
         return
-    
-    if not is_valid_email(email):
-        messagebox.showerror("Error", "Invalid email format.")
-        return
+        
     
     if user_exists(first_name, last_name, email):
         messagebox.showerror("Error", "Oops! This user or email is already saved.")
@@ -215,7 +209,7 @@ print(all_users)
 
 
 root = tk.Tk()
-root.title("Welcome")
+root.title("Sync")
 root.geometry("300x200")
 root.configure(bg="#2C2C2C")
 root.protocol("WM_DELETE_WINDOW", on_closing)
