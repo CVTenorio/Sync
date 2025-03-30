@@ -181,6 +181,8 @@ def view_all_records():
     ViewRecords.column("Birthday", width=120)
     ViewRecords.column("Gender", width=120)
 
+
+
     records = []
     
     # Fetch records from the database
