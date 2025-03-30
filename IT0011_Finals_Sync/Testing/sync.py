@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import messagebox, scrolledtext
 from tkcalendar import DateEntry
 import json
 import sqlite3
@@ -65,7 +65,6 @@ def save_data():
         messagebox.showerror("Error", "Fields cannot have the same value.")
         return
         
-    
     if user_exists(first_name, last_name):
         messagebox.showerror("Error", "Oops! This user is already saved.")
         return
@@ -154,17 +153,14 @@ def go_back():
     signup_window.grab_release()
     signup_window.destroy()
     root.deiconify()
-    
-    tk.Button(signup_window, text="Back", command=go_back, bg="black", fg="#FFD700", font=("Arial", 12, "bold")).pack(pady=5)
-
 
 #View all records
 #database and json file 
-#####################################
+
 def view_all_records():
     global view_window
     root.withdraw()
-    view_window = tk.TopLevel(root)
+    view_window = tk.Toplevel(root)
     view_window.title("All User Records")
     view_window.geometry("600x400")
     view_window.configure(bg="#2C2C2C")
@@ -174,7 +170,7 @@ def view_all_records():
     text_area = scrolledtext.ScrolledText(view_window, wrap=tk.WORD, width=80, height=20, bg="#2C2C2C", fg="#FFD700", font=("Arial", 10))
     text_area.pack(pady=10, padx=10)
     
-#####################################
+
 
     records = []
     
@@ -189,10 +185,10 @@ def view_all_records():
         for record in db_records:
             records.append({
                 "first_name": record[0],
-                "middle_name": record[0],
-                "last_name": record[0],
-                "birthday": record[0],
-                "gender": record[0]
+                "middle_name": record[1],
+                "last_name": record[2],
+                "birthday": record[3],
+                "gender": record[4]
             })
     
     # Fetch records from the JSON file
@@ -206,16 +202,18 @@ def view_all_records():
             pass
     
     for record in records:
-        text_area.insert(tk.END, f"First Name: {record{'entry_firstname'}}, Middle Name: {record['entry_middle_name']},  ")
+        text_area.insert(tk.END, f"First Name: {record['first_name']}, Middle Name: {record['middle_name']}, Last Name: {record['last_name']}, Birthday: {record['birthday']}, Gender: {record['gender']}\n")    
     
-    
-    return records
+    tk.Button(view_window, text="Back", command=close_view_window, bg="black", fg="#FFD700", font=("Arial", 12, "bold")).pack(pady=5)
+
+def close_view_window():
+    view_window.grab_release()
+    view_window.destroy()
+    root.deiconify()
 
 # Example usage:
-all_users = view_all_records()
-print(all_users)
-
-
+#all_users = view_all_records()
+#print(all_users)
 
 root = tk.Tk()
 root.title("Sync")
@@ -224,5 +222,6 @@ root.configure(bg="#2C2C2C")
 root.protocol("WM_DELETE_WINDOW", on_closing)
 
 tk.Button(root, text="Sign Up", command=open_signup, bg="black", fg="#FFD700", font=("Arial", 12, "bold")).pack(expand=True)
+tk.Button(root, text="View Records", command=view_all_records, bg="black", fg="#FFD700", font=("Arial", 12, "bold")).pack(expand=True)
 
 root.mainloop()
