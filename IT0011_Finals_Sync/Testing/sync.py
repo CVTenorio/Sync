@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox, scrolledtext
+from tkinter import messagebox, ttk
 from tkcalendar import DateEntry
 import json
 import sqlite3
@@ -156,7 +156,6 @@ def go_back():
 
 #View all records
 #database and json file 
-
 #improving the GUI
 def view_all_records():
     global view_window
@@ -168,10 +167,19 @@ def view_all_records():
     view_window.grab_set()
     view_window.protocol("WM_DELETE_WINDOW", lambda: close_view_window())
     
-    text_area = scrolledtext.ScrolledText(view_window, wrap=tk.WORD, width=80, height=20, bg="#2C2C2C", fg="#FFD700", font=("Arial", 10))
-    text_area.pack(pady=10, padx=10)
+    ViewRecords = ttk.Treeview(view_window, columns=("First Name", "Middle Name", "Last Name", "Birthday", "Gender"), show="headings")
     
-
+    ViewRecords.heading("First Name", text="First Name")
+    ViewRecords.heading("Middle Name", text="Middle Name")
+    ViewRecords.heading("Last Name", text="Last Name")
+    ViewRecords.heading("Birthday", text="Birthday")
+    ViewRecords.heading("Gender", text="Gender")
+    
+    ViewRecords.column("First Name", width=120)
+    ViewRecords.column("Middle Name", width=120)
+    ViewRecords.column("Last Name", width=120)
+    ViewRecords.column("Birthday", width=120)
+    ViewRecords.column("Gender", width=120)
 
     records = []
     
@@ -203,7 +211,17 @@ def view_all_records():
             pass
     
     for record in records:
-        text_area.insert(tk.END, f"First Name: {record['first_name']}, Middle Name: {record['middle_name']}, Last Name: {record['last_name']}, Birthday: {record['birthday']}, Gender: {record['gender']}\n")    
+        
+        ##new code for gui of records
+       ViewRecords.insert("", tk.END, values=(record["first_name"], record["middle_name"], record["last_name"], record["birthday"], record["gender"]))
+
+    ViewRecords.pack(pady=10, padx=10, fill=tk.BOTH, expand=True)   
+    
+    # naglagay lang ako ng refresh can be remove naman if sagabal since wala naman requirements
+    refresh_button = tk.Button(view_window, text="Refresh", command=view_all_records, bg="black", fg="#FFD700", font=("Arial", 12, "bold"))
+    refresh_button.pack(pady=5)
+    close_button = tk.Button(view_window, text="Close", command=close_view_window, bg="black", fg="#FFD700", font=("Arial", 12, "bold"))
+    close_button.pack(pady=5)
     
     tk.Button(view_window, text="Back", command=close_view_window, bg="black", fg="#FFD700", font=("Arial", 12, "bold")).pack(pady=5)
 
@@ -211,10 +229,6 @@ def close_view_window():
     view_window.grab_release()
     view_window.destroy()
     root.deiconify()
-
-# Example usage:
-#all_users = view_all_records()
-#print(all_users)
 
 root = tk.Tk()
 root.title("Sync")

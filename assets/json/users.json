@@ -61,5 +61,19 @@
         "last_name": "Pens",
         "birthday": "2025-03-11",
         "gender": "Other"
+    },
+    {
+        "first_name": "New",
+        "middle_name": "Test",
+        "last_name": "Refresh",
+        "birthday": "2025-03-04",
+        "gender": "Other"
+    },
+    {
+        "first_name": "Park",
+        "middle_name": "Joo",
+        "last_name": "Soo",
+        "birthday": "2025-03-08",
+        "gender": "Male"
     }
 ]
