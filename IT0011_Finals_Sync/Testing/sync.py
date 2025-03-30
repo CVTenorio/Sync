@@ -157,6 +157,7 @@ def go_back():
 #View all records
 #database and json file 
 
+#improving the GUI
 def view_all_records():
     global view_window
     root.withdraw()
