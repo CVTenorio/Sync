@@ -181,8 +181,6 @@ def view_all_records():
     ViewRecords.column("Birthday", width=120)
     ViewRecords.column("Gender", width=120)
 
-
-
     records = []
     
     # Fetch records from the database
@@ -218,12 +216,6 @@ def view_all_records():
        ViewRecords.insert("", tk.END, values=(record["first_name"], record["middle_name"], record["last_name"], record["birthday"], record["gender"]))
 
     ViewRecords.pack(pady=10, padx=10, fill=tk.BOTH, expand=True)   
-    
-    # naglagay lang ako ng refresh can be remove naman if sagabal since wala naman requirements
-    refresh_button = tk.Button(view_window, text="Refresh", command=view_all_records, bg="black", fg="#FFD700", font=("Arial", 12, "bold"))
-    refresh_button.pack(pady=5)
-    close_button = tk.Button(view_window, text="Close", command=close_view_window, bg="black", fg="#FFD700", font=("Arial", 12, "bold"))
-    close_button.pack(pady=5)
     
     tk.Button(view_window, text="Back", command=close_view_window, bg="black", fg="#FFD700", font=("Arial", 12, "bold")).pack(pady=5)
 

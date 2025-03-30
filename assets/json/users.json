@@ -75,5 +75,12 @@
         "last_name": "Soo",
         "birthday": "2025-03-08",
         "gender": "Male"
+    },
+    {
+        "first_name": "Done",
+        "middle_name": "With",
+        "last_name": "View Records",
+        "birthday": "2025-03-30",
+        "gender": "Other"
     }
 ]
