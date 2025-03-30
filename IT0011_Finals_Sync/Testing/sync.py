@@ -54,11 +54,11 @@ def save_data():
     first_name = entry_first_name.get()
     middle_name = entry_middle_name.get()
     last_name = entry_last_name.get()
-    email = entry_email.get()
+    # email = entry_email.get()
     birthday = entry_birthday.get_date().strftime('%Y-%m-%d')
     gender = ", ".join([g for g, var in gender_vars.items() if var.get()])
     
-    if not first_name or not middle_name or not last_name or not email or not birthday or not gender:
+    if not first_name or not middle_name or not last_name or  not birthday or not gender:
         messagebox.showerror("Error", "Please fill in all required fields.")
         return
     
@@ -70,11 +70,8 @@ def save_data():
         messagebox.showerror("Error", "Fields cannot have the same value.")
         return
     
-    if not is_valid_email(email):
-        messagebox.showerror("Error", "Invalid email format.")
-        return
     
-    if user_exists(first_name, last_name, email):
+    if user_exists(first_name, last_name):
         messagebox.showerror("Error", "Oops! This user or email is already saved.")
         return
     
@@ -82,7 +79,6 @@ def save_data():
         "first_name": first_name,
         "middle_name": middle_name,
         "last_name": last_name,
-        "email": email,
         "birthday": birthday,
         "gender": gender
     }
@@ -100,7 +96,7 @@ def save_data():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute("INSERT INTO users (first_name, middle_name, last_name, email, birthday, gender) VALUES (?, ?, ?, ?, ?, ?)",
-                   (first_name, middle_name, last_name, email, birthday, gender))
+                   (first_name, middle_name, last_name, birthday, gender))
     conn.commit()
     conn.close()
     
@@ -113,7 +109,7 @@ def clear_fields():
     entry_first_name.delete(0, tk.END)
     entry_middle_name.delete(0, tk.END)
     entry_last_name.delete(0, tk.END)
-    entry_email.delete(0, tk.END)
+    # entry_email.delete(0, tk.END)
     entry_birthday.set_date('')
     for var in gender_vars.values():
         var.set(0)
