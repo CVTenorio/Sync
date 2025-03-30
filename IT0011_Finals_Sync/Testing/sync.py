@@ -21,7 +21,6 @@ def setup_database():
                       first_name TEXT UNIQUE,
                       middle_name TEXT,
                       last_name TEXT,
-                      email TEXT UNIQUE,
                       birthday TEXT,
                       gender TEXT)''')
     conn.commit()
@@ -29,19 +28,19 @@ def setup_database():
 
 setup_database()
 
-def user_exists(first_name, last_name, email):
+def user_exists(first_name, last_name):
     try:
         with open(JSON_PATH, "r") as file:
             users = json.load(file)
     except (FileNotFoundError, json.JSONDecodeError):
         users = []
     
-    if any(user["first_name"] == first_name and user["last_name"] == last_name or user["email"] == email for user in users):
+    if any(user["first_name"] == first_name and user["last_name"] == last_name for user in users):
         return True
     
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE first_name = ? AND last_name = ? OR email = ?", (first_name, last_name, email))
+    cursor.execute("SELECT * FROM users WHERE first_name = ? AND last_name = ?", (first_name, last_name))
     result = cursor.fetchone()
     conn.close()
     
@@ -51,11 +50,10 @@ def save_data():
     first_name = entry_first_name.get()
     middle_name = entry_middle_name.get()
     last_name = entry_last_name.get()
-    email = entry_email.get()
     birthday = entry_birthday.get_date().strftime('%Y-%m-%d')
     gender = ", ".join([g for g, var in gender_vars.items() if var.get()])
     
-    if not first_name or not middle_name or not last_name or not email or not birthday or not gender:
+    if not first_name or not middle_name or not last_name or not birthday or not gender:
         messagebox.showerror("Error", "Please fill in all required fields.")
         return
     
@@ -68,15 +66,14 @@ def save_data():
         return
         
     
-    if user_exists(first_name, last_name, email):
-        messagebox.showerror("Error", "Oops! This user or email is already saved.")
+    if user_exists(first_name, last_name):
+        messagebox.showerror("Error", "Oops! This user is already saved.")
         return
     
     user_data = {
         "first_name": first_name,
         "middle_name": middle_name,
         "last_name": last_name,
-        "email": email,
         "birthday": birthday,
         "gender": gender
     }
@@ -93,8 +90,8 @@ def save_data():
     
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO users (first_name, middle_name, last_name, email, birthday, gender) VALUES (?, ?, ?, ?, ?, ?)",
-                   (first_name, middle_name, last_name, email, birthday, gender))
+    cursor.execute("INSERT INTO users (first_name, middle_name, last_name, birthday, gender) VALUES (?, ?, ?, ?, ?, ?)",
+                   (first_name, middle_name, last_name, birthday, gender))
     conn.commit()
     conn.close()
     
@@ -107,7 +104,6 @@ def clear_fields():
     entry_first_name.delete(0, tk.END)
     entry_middle_name.delete(0, tk.END)
     entry_last_name.delete(0, tk.END)
-    entry_email.delete(0, tk.END)
     entry_birthday.set_date('')
     for var in gender_vars.values():
         var.set(0)
@@ -139,11 +135,6 @@ def open_signup():
     global entry_last_name
     entry_last_name = tk.Entry(signup_window, font=("Arial", 12))
     entry_last_name.pack()
-    
-    tk.Label(signup_window, text="Email:", bg="#2C2C2C", fg="#FFD700", font=("Arial", 10, "bold")).pack()
-    global entry_email
-    entry_email = tk.Entry(signup_window, font=("Arial", 12))
-    entry_email.pack()
     
     tk.Label(signup_window, text="Birthday:", bg="#2C2C2C", fg="#FFD700", font=("Arial", 10, "bold")).pack()
     global entry_birthday
@@ -185,7 +176,6 @@ def view_all_records():
                 "first_name": record[0],
                 "middle_name": record[0],
                 "last_name": record[0],
-                "email": record[0],
                 "birthday": record[0],
                 "gender": record[0]
             })
