@@ -211,12 +211,8 @@ def view_all_records():
             pass
     
     for record in records:
-        
-        ##new code for gui of records
        ViewRecords.insert("", tk.END, values=(record["first_name"], record["middle_name"], record["last_name"], record["birthday"], record["gender"]))
-
     ViewRecords.pack(pady=10, padx=10, fill=tk.BOTH, expand=True)   
-    
     tk.Button(view_window, text="Back", command=close_view_window, bg="black", fg="#FFD700", font=("Arial", 12, "bold")).pack(pady=5)
 
 def close_view_window():
