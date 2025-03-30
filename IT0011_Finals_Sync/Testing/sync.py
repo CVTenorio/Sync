@@ -160,7 +160,22 @@ def go_back():
 
 #View all records
 #database and json file 
+#####################################
 def view_all_records():
+    global view_window
+    root.withdraw()
+    view_window = tk.TopLevel(root)
+    view_window.title("All User Records")
+    view_window.geometry("600x400")
+    view_window.configure(bg="#2C2C2C")
+    view_window.grab_set()
+    view_window.protocol("WM_DELETE_WINDOW", lambda: close_view_window())
+    
+    text_area = scrolledtext.ScrolledText(view_window, wrap=tk.WORD, width=80, height=20, bg="#2C2C2C", fg="#FFD700", font=("Arial", 10))
+    text_area.pack(pady=10, padx=10)
+    
+#####################################
+
     records = []
     
     # Fetch records from the database
@@ -189,6 +204,10 @@ def view_all_records():
                     records.extend(json_records)
         except (json.JSONDecodeError, FileNotFoundError):
             pass
+    
+    for record in records:
+        text_area.insert(tk.END, f"First Name: {record{'entry_firstname'}}, Middle Name: {record['entry_middle_name']},  ")
+    
     
     return records
 
