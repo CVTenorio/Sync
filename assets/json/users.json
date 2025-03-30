@@ -54,5 +54,12 @@
         "last_name": "z",
         "birthday": "2025-03-30",
         "gender": "Male"
+    },
+    {
+        "first_name": "Tens",
+        "middle_name": "Dens",
+        "last_name": "Pens",
+        "birthday": "2025-03-11",
+        "gender": "Other"
     }
 ]
