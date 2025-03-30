@@ -90,7 +90,7 @@ def save_data():
     
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO users (first_name, middle_name, last_name, birthday, gender) VALUES (?, ?, ?, ?, ?, ?)",
+    cursor.execute("INSERT INTO users (first_name, middle_name, last_name, birthday, gender) VALUES (?, ?, ?, ?, ?)",
                    (first_name, middle_name, last_name, birthday, gender))
     conn.commit()
     conn.close()

@@ -40,5 +40,19 @@
         "last_name": "zonrox",
         "birthday": "2025-03-30",
         "gender": "Male"
+    },
+    {
+        "first_name": "Carl Vincent",
+        "middle_name": "Causon",
+        "last_name": "Tenorio",
+        "birthday": "2025-03-30",
+        "gender": "Male"
+    },
+    {
+        "first_name": "x",
+        "middle_name": "yyy",
+        "last_name": "z",
+        "birthday": "2025-03-30",
+        "gender": "Male"
     }
 ]
