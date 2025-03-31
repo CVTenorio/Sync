@@ -157,36 +157,45 @@ def go_back():
 #View all records
 #database and json file 
 def view_all_records():
-    global view_window
+    global view_window, search_entry, ViewRecords
     root.withdraw()
     view_window = tk.Toplevel(root)
     view_window.title("All User Records")
-    view_window.geometry("600x400")
+    view_window.geometry("600x450")
     view_window.configure(bg="#2C2C2C")
     view_window.grab_set()
-    view_window.protocol("WM_DELETE_WINDOW", lambda: close_view_window())
+    view_window.protocol("WM_DELETE_WINDOW", close_view_window)
+    
+    tk.Label(view_window, text="Search by First Name:", bg="#2C2C2C", fg="#FFD700", font=("Arial", 10, "bold")).pack()
+    search_entry = tk.Entry(view_window, font=("Arial", 12))
+    search_entry.pack()
+    tk.Button(view_window, text="Search", command=search_records, bg="black", fg="#FFD700", font=("Arial", 12, "bold")).pack(pady=5)
     
     ViewRecords = ttk.Treeview(view_window, columns=("First Name", "Middle Name", "Last Name", "Birthday", "Gender"), show="headings")
     
-    ViewRecords.heading("First Name", text="First Name")
-    ViewRecords.heading("Middle Name", text="Middle Name")
-    ViewRecords.heading("Last Name", text="Last Name")
-    ViewRecords.heading("Birthday", text="Birthday")
-    ViewRecords.heading("Gender", text="Gender")
+    for col in ["First Name", "Middle Name", "Last Name", "Birthday", "Gender"]:
+        ViewRecords.heading(col, text=col)
+        ViewRecords.column(col, width=120)
     
-    ViewRecords.column("First Name", width=120)
-    ViewRecords.column("Middle Name", width=120)
-    ViewRecords.column("Last Name", width=120)
-    ViewRecords.column("Birthday", width=120)
-    ViewRecords.column("Gender", width=120)
+    ViewRecords.pack(pady=10, padx=10, fill=tk.BOTH, expand=True)
+    
+    tk.Button(view_window, text="Back", command=close_view_window, bg="black", fg="#FFD700", font=("Arial", 12, "bold")).pack(pady=5)
+    
+    load_records()
 
+def load_records(filter_name=None):
+    ViewRecords.delete(*ViewRecords.get_children())
     records = []
     
-    # Fetch records from the database
     if os.path.exists(DB_PATH):
         conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
-        cursor.execute("SELECT first_name, middle_name, last_name, birthday, gender FROM users")
+        query = "SELECT first_name, middle_name, last_name, birthday, gender FROM users"
+        params = ()
+        if filter_name:
+            query += " WHERE first_name LIKE ?"
+            params = (f"%{filter_name}%",)
+        cursor.execute(query, params)
         db_records = cursor.fetchall()
         conn.close()
         
@@ -199,7 +208,6 @@ def view_all_records():
                 "gender": record[4]
             })
     
-    # Fetch records from the JSON file
     if os.path.exists(JSON_PATH):
         try:
             with open(JSON_PATH, "r") as file:
@@ -210,9 +218,13 @@ def view_all_records():
             pass
     
     for record in records:
-       ViewRecords.insert("", tk.END, values=(record["first_name"], record["middle_name"], record["last_name"], record["birthday"], record["gender"]))
-    ViewRecords.pack(pady=10, padx=10, fill=tk.BOTH, expand=True)   
-    tk.Button(view_window, text="Back", command=close_view_window, bg="black", fg="#FFD700", font=("Arial", 12, "bold")).pack(pady=5)
+        if not filter_name or filter_name.lower() in record["first_name"].lower():
+            ViewRecords.insert("", tk.END, values=(record["first_name"], record["middle_name"], record["last_name"], record["birthday"], record["gender"]))
+
+def search_records():
+    filter_name = search_entry.get().strip()
+    load_records(filter_name)
+
 
 def close_view_window():
     view_window.grab_release()
