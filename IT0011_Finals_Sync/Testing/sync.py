@@ -184,6 +184,7 @@ def view_all_records():
     load_records()
 
 #upon search it duplicates the record even though its only 1 record in the View Records
+#fixed
 def load_records(filter_name=None):
     ViewRecords.delete(*ViewRecords.get_children())
     records = []
