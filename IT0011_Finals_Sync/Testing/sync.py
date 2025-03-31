@@ -187,6 +187,8 @@ def view_all_records():
 def load_records(filter_name=None):
     ViewRecords.delete(*ViewRecords.get_children())
     records = []
+    existing_names = set()
+    
     
     if os.path.exists(DB_PATH):
         conn = sqlite3.connect(DB_PATH)
@@ -200,27 +202,37 @@ def load_records(filter_name=None):
         db_records = cursor.fetchall()
         conn.close()
         
+        
         for record in db_records:
-            records.append({
-                "first_name": record[0],
-                "middle_name": record[1],
-                "last_name": record[2],
-                "birthday": record[3],
-                "gender": record[4]
-            })
+            name_tuple = (record[0], record[2])
+            if name_tuple not in existing_names:
+                existing_names.add(name_tuple)
+                if not filter_name or filter_name.lower() in record[0].lower():
+                    records.append(record)   
+
     
     if os.path.exists(JSON_PATH):
         try:
             with open(JSON_PATH, "r") as file:
                 json_records = json.load(file)
                 if isinstance(json_records, list):
-                    records.extend(json_records)
+                    for record in json_records:
+                        name_tuple = (record["first_name"], record["last_name"])
+                        if name_tuple not in existing_names:
+                            existing_names.add(name_tuple)
+                            if not filter_name or filter_name.lower() in record["first_name"].lower():
+                                records.append((
+                                    record["first_name"],
+                                    record["middle_name"],
+                                    record["last_name"],
+                                    record["birthday"],
+                                    record["gender"]
+                                ))
         except (json.JSONDecodeError, FileNotFoundError):
             pass
     
     for record in records:
-        if not filter_name or filter_name.lower() in record["first_name"].lower():
-            ViewRecords.insert("", tk.END, values=(record["first_name"], record["middle_name"], record["last_name"], record["birthday"], record["gender"]))
+            ViewRecords.insert("", tk.END, values=record)
 
 def search_records():
     filter_name = search_entry.get().strip()
