@@ -156,7 +156,6 @@ def go_back():
 
 #View all records
 #database and json file 
-#finding a bug
 def view_all_records():
     global view_window, search_entry, ViewRecords
     root.withdraw()
@@ -184,6 +183,7 @@ def view_all_records():
     
     load_records()
 
+#upon search it duplicates the record even though its only 1 record in the View Records
 def load_records(filter_name=None):
     ViewRecords.delete(*ViewRecords.get_children())
     records = []
