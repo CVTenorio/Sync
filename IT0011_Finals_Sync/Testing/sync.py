@@ -156,6 +156,7 @@ def go_back():
 
 #View all records
 #database and json file 
+#finding a bug
 def view_all_records():
     global view_window, search_entry, ViewRecords
     root.withdraw()
