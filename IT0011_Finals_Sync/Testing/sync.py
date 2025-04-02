@@ -104,6 +104,7 @@ def clear_fields():
     entry_middle_name.delete(0, tk.END)
     entry_last_name.delete(0, tk.END)
     entry_birthday.set_date('')
+
     for var in gender_vars.values():
         var.set(0)
 
@@ -154,8 +155,6 @@ def go_back():
     signup_window.destroy()
     root.deiconify()
 
-#View all records
-#database and json file 
 def view_all_records():
     global view_window, search_entry, ViewRecords
     root.withdraw()
@@ -183,35 +182,32 @@ def view_all_records():
     
     load_records()
 
-#upon search it duplicates the record even though its only 1 record in the View Records
-#fixed
 def load_records(filter_name=None):
-    ViewRecords.delete(*ViewRecords.get_children())
+    ViewRecords.delete(*ViewRecords.get_children())  # Clear any existing data in the table
     records = []
     existing_names = set()
-    
-    
+
     if os.path.exists(DB_PATH):
         conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
-        query = "SELECT first_name, middle_name, last_name, birthday, gender FROM users"
+        query = """SELECT first_name, middle_name, last_name, birthday, gender FROM users"""
         params = ()
+        
         if filter_name:
-            query += " WHERE first_name LIKE ?"
-            params = (f"%{filter_name}%",)
+            # Update query to search by first name, middle name, or last name
+            query += """ WHERE first_name LIKE ? OR middle_name LIKE ? OR last_name LIKE ?"""
+            params = (f"%{filter_name}%", f"%{filter_name}%", f"%{filter_name}%")
+        
         cursor.execute(query, params)
         db_records = cursor.fetchall()
         conn.close()
-        
-        
+
         for record in db_records:
             name_tuple = (record[0], record[2])
             if name_tuple not in existing_names:
                 existing_names.add(name_tuple)
-                if not filter_name or filter_name.lower() in record[0].lower():
-                    records.append(record)   
-
-    
+                records.append(record)
+                
     if os.path.exists(JSON_PATH):
         try:
             with open(JSON_PATH, "r") as file:
@@ -221,7 +217,9 @@ def load_records(filter_name=None):
                         name_tuple = (record["first_name"], record["last_name"])
                         if name_tuple not in existing_names:
                             existing_names.add(name_tuple)
-                            if not filter_name or filter_name.lower() in record["first_name"].lower():
+                            if not filter_name or (filter_name.lower() in record["first_name"].lower() or
+                                                    filter_name.lower() in record["middle_name"].lower() or
+                                                    filter_name.lower() in record["last_name"].lower()):
                                 records.append((
                                     record["first_name"],
                                     record["middle_name"],
@@ -233,17 +231,46 @@ def load_records(filter_name=None):
             pass
     
     for record in records:
-            ViewRecords.insert("", tk.END, values=record)
+        ViewRecords.insert("", tk.END, values=record)
 
 def search_records():
     filter_name = search_entry.get().strip()
-    load_records(filter_name)
-
+    if filter_name:
+        load_records(filter_name)  # Load records based on the filter_name
+    else:
+        # If the search box is empty, clear the displayed records
+        ViewRecords.delete(*ViewRecords.get_children())
 
 def close_view_window():
     view_window.grab_release()
     view_window.destroy()
     root.deiconify()
+
+def clear_all_data():
+    confirmation = messagebox.askyesno("Confirmation", "Are you sure you want to delete all records? This action cannot be undone.")
+    
+    if confirmation:
+        # Clear JSON file
+        try:
+            with open(JSON_PATH, "w") as file:
+                json.dump([], file, indent=4)
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to clear JSON file: {e}")
+            return
+
+        # Clear SQLite database
+        try:
+            conn = sqlite3.connect(DB_PATH)
+            cursor = conn.cursor()
+            cursor.execute("DELETE FROM users")  # Delete all records
+            conn.commit()
+            conn.close()
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to clear database: {e}")
+            return
+
+        messagebox.showinfo("Success", "All records have been cleared!")
+        load_records()
 
 root = tk.Tk()
 root.title("Sync")
