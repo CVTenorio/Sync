@@ -1,5 +1,5 @@
 <div align="center">
-  <a href="https://github.com/">
+  <a href="https://github.com/CVTenorio/Sync">
   <!-- TODO: If you want to add logo or banner you can add it here -->
     <img src="./assets/img/" alt="Sync" width="130" height="100">
   </a>
@@ -8,10 +8,8 @@
 </div>
 <!-- TODO: Make a short description -->
 <div align="center">
-  Short Description. (Optional)
 </div>
 <br />
-![](https://visit-counter.vercel.app/counter.png?page=CVTenorio)
 
 # Technologys
 ![Python](https://img.shields.io/badge/Python-yellow?style=for-the-badge&logo=python&logoColor=black)
