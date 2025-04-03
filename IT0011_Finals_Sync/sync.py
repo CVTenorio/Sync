@@ -170,7 +170,7 @@ def view_all_records():
     view_window.grab_set()
     view_window.protocol("WM_DELETE_WINDOW", close_view_window)
     
-    tk.Label(view_window, text="Search by First Name:", bg="#2C2C2C", fg="#FFD700", font=("Arial", 10, "bold")).pack()
+    tk.Label(view_window, text="Search by (First Name || Middle Name || Last Name):", bg="#2C2C2C", fg="#FFD700", font=("Arial", 10, "bold")).pack()
     search_entry = tk.Entry(view_window, font=("Arial", 12))
     search_entry.pack()
     tk.Button(view_window, text="Search", command=search_records, bg="black", fg="#FFD700", font=("Arial", 12, "bold")).pack(pady=5)
