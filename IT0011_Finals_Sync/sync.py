@@ -8,7 +8,6 @@ from PIL import Image, ImageTk
 import json
 import sqlite3
 import os
-import re
 
 # Ensure directories exist
 os.makedirs("assets/database", exist_ok=True)
