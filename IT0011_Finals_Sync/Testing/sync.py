@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox, ttk
 from tkcalendar import DateEntry
+from PIL import Image, ImageTk
 import json
 import sqlite3
 import os
@@ -112,8 +113,9 @@ def on_closing():
     root.quit()
 
 def open_signup():
-    global signup_window, gender_vars
+    global signup_window, gender_vars, image_label, image
     root.withdraw()
+   
     signup_window = tk.Toplevel(root)
     signup_window.title("Sign-Up Form")
     signup_window.geometry("450x500")
@@ -271,6 +273,17 @@ def clear_all_data():
 
         messagebox.showinfo("Success", "All records have been cleared!")
         load_records()
+
+
+ #image here
+image_path = "/assets/img/SYNC.png" 
+if os.path.exists(image_path):
+        image = Image.open(image_path)
+        image = Image.resize((100, 100), Image.LANCZOS)  
+        image = ImageTk.PhotoImage(image)
+
+        image_label = tk.Label(signup_window, image=image, bg="#2C2C2C")
+        image_label.pack(pady=10)
 
 root = tk.Tk()
 root.title("Sync")
