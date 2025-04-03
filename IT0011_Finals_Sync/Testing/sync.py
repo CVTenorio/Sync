@@ -275,8 +275,6 @@ def clear_all_data():
         load_records()
 
 
-<<<<<<< HEAD
-=======
  #image here testing
 image_path = "/assets/img/SYNC.png" 
 if os.path.exists(image_path):
@@ -287,7 +285,6 @@ if os.path.exists(image_path):
         image_label = tk.Label(signup_window, image=image, bg="#2C2C2C")
         image_label.pack(pady=10)
 
->>>>>>> 62dcc3b46ab9e34ad9ecb1a8a5526b318212c56a
 root = tk.Tk()
 root.title("Sync")
 root.geometry("300x200")
