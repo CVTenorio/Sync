@@ -278,21 +278,24 @@ def clear_all_data():
         load_records()
 
 
- #image here
-image_path = "/assets/img/SYNC.png" 
-if os.path.exists(image_path):
-        image = Image.open(image_path)
-        image = Image.resize((100, 100), Image.LANCZOS)  
-        image = ImageTk.PhotoImage(image)
 
-        image_label = tk.Label(signup_window, image=image, bg="#2C2C2C")
-        image_label.pack(pady=10)
 
 root = tk.Tk()
 root.title("Sync")
 root.geometry("300x200")
 root.configure(bg="#2C2C2C")
 root.protocol("WM_DELETE_WINDOW", on_closing)
+
+image_path = "./assets/img/SYNC.png" 
+if os.path.exists(image_path):
+        image = Image.open(image_path)
+        image = image.resize((100, 100), Image.LANCZOS)  
+        image = ImageTk.PhotoImage(image)
+
+        root.image_ref = image
+
+        image_label = tk.Label(root, image=image, bg="#2C2C2C")
+        image_label.pack(pady=10)
 
 tk.Button(root, text="Sign Up", command=open_signup, bg="black", fg="#FFD700", font=("Arial", 12, "bold")).pack(expand=True)
 tk.Button(root, text="View Records", command=view_all_records, bg="black", fg="#FFD700", font=("Arial", 12, "bold")).pack(expand=True)
