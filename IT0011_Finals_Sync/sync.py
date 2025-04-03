@@ -278,8 +278,11 @@ def clear_all_data():
         load_records()
 
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 62dcc3b46ab9e34ad9ecb1a8a5526b318212c56a
 root = tk.Tk()
 root.title("Sync")
 root.geometry("300x200")
