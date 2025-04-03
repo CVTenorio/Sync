@@ -96,5 +96,12 @@
         "last_name": "Santos",
         "birthday": "2025-03-02",
         "gender": "Male"
+    },
+    {
+        "first_name": "Lito",
+        "middle_name": "Vince",
+        "last_name": "Cruz",
+        "birthday": "2025-04-12",
+        "gender": "Male"
     }
 ]
