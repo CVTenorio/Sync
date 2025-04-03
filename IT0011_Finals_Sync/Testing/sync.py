@@ -275,7 +275,7 @@ def clear_all_data():
         load_records()
 
 
- #image here
+ #image here testing
 image_path = "/assets/img/SYNC.png" 
 if os.path.exists(image_path):
         image = Image.open(image_path)
